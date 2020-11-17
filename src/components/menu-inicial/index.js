@@ -57,7 +57,7 @@ function MenuInicial(){
                             <i class="fas fa-share fa-2x"></i>
 
                             <div>
-                                Emprestar Livro
+                                Emprestar
                             </div>
                         </div>
                     </div>             
