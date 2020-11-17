@@ -1,0 +1,9 @@
+.btn{
+    border-radius: 0;
+    background-color: #4682B4;
+    border-color: #4682B4;
+}
+
+.form-control{
+    border-radius: 0;
+}

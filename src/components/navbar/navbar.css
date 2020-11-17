@@ -1,0 +1,22 @@
+.logo{
+    border-radius: 50%;
+    width:50px;
+}
+
+.navbar{
+    background-color: #4682B4;
+}
+
+.navbar a{
+    color: #ffffff;
+    text-decoration: none;
+}
+
+.navbar a:hover{
+    color: #ffffff;
+}
+
+.img-perfil{
+    border-radius: 50%;
+    width: 38px;
+}
