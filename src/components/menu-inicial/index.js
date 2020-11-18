@@ -41,13 +41,15 @@ function MenuInicial(){
 
                 <div class="col-md-2 col-sm-12  p-2">
                     <div className="card">
-                        <div className="card-body menu-item">
-                        <i class="fas fa-book fa-2x"></i>
+                        <Link to="/livros">
+                            <div className="card-body menu-item">
+                                <i class="fas fa-book fa-2x"></i>
 
-                            <div>
-                                Livros
+                                <div>
+                                    Livros
+                                </div>
                             </div>
-                        </div>
+                        </Link>
                     </div>             
                 </div>
 

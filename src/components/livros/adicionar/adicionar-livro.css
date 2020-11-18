@@ -1,0 +1,18 @@
+.btn{
+    border-radius: 0;
+    background-color: #4682B4;
+    border-color: #4682B4;
+}
+
+.form-control{
+    border-radius: 0;
+}
+
+.table .thead-dark th{
+    background-color: #4682B4;
+    border-color: #4682B4;
+}
+
+.table {
+    color: #555555;
+}
