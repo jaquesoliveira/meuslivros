@@ -12,21 +12,22 @@ function AdicionarLivro(){
             <form>                
                     <div class="form-group">
                         <label >Título do livro</label>
-                        <input className="form-control col-6" placeholder="Nome do livro"/>
+                        <input className="form-control col-lg-6 col-sm-12" placeholder="Nome do livro"/>
                     </div>
 
                     <div class="form-group">
                         <label >Editora</label>
-                        <input className="form-control col-3" placeholder="Nome da editora"/>
+                        <input className="form-control col-lg-3 col-sm-12" placeholder="Nome da editora"/>
                     </div>
 
                     <div class="form-group">                        
                         <label >Autor</label>
-                        <div className="row ml-1">
-                            <input className="form-control col-5" placeholder="Nome do Autor"/>
-                            <button className="btn btn-info "><i className="fas fa-plus"></i></button>
-                        </div>                       
-                    </div>                    
+                        <div class="form-group inline"> 
+                            <input className="form-control col-lg-5 " placeholder="Nome do Autor"/>
+                            <button className="btn btn-info col-sm-1 mt-1"><i className="fas fa-plus"></i></button>
+                        </div>
+                    </div>                       
+                                        
 
                     <table class="table">
                         <thead class="thead-dark">
@@ -51,6 +52,11 @@ function AdicionarLivro(){
                             
                         </tbody>
                     </table>
+
+                    <div class="form-group">
+                        <label >Detalhes</label>
+                        <textarea className="form-control" placeholder="Nome da editora"/>
+                    </div>
                 <hr />
                 <button type="button" className="btn btn-secondary mt-2 mr-2">
                     <i className="fas fa-save">Salvar</i>
