@@ -17,7 +17,7 @@ function App() {
     <>
       <Router>
         <Navbar />
-        <div className="container mt-5 pt-5">          
+        <div className="container mt-4 pt-5">          
           <Route exact path='/' component={MenuInicial}></Route>
           <Route exact path='/autores' component={Autores}></Route>
           <Route exact path='/autores/adicionar' component={AdicionarAutor}></Route>

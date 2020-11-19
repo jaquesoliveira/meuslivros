@@ -1,12 +1,15 @@
-import React from 'react';
+import React, {useState, useEffect}  from 'react';
 import { Link } from 'react-router-dom';
 import './adicionar-livro.css';
 
+
+
 function AdicionarLivro(){
+    
+
     return(
         <>
-            <h5>Adicionar Livro</h5>
-            
+            <h5>Adicionar Livro</h5>            
             <hr />
 
             <form>                
@@ -26,8 +29,7 @@ function AdicionarLivro(){
                             <input className="form-control col-lg-5 " placeholder="Nome do Autor"/>
                             <button className="btn btn-info col-sm-1 mt-1"><i className="fas fa-plus"></i></button>
                         </div>
-                    </div>                       
-                                        
+                    </div>              
 
                     <table class="table">
                         <thead class="thead-dark">
