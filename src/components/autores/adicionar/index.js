@@ -15,31 +15,52 @@ function AdicionarAutor(){
     //const storage = firebase.storage();
     const db = firebase.firestore();
 
-
     function incluir(){
-        db.collection('autores').add({
-            nomeAutor: nomeAutor
-        }).then(() => {
-            setMsgTipo('sucesso');
-            setCarregando(0);
-        }).catch(erro =>{
-            setMsg(erro);
-            setMsgTipo('erro');
-            setCarregando(0);
-        });
+
+        if(nomeAutor){
+            console.log(nomeAutor);
+
+            db.collection('autores').add({
+                nomeAutor: nomeAutor
+            }).then(() => {
+                setMsgTipo('sucesso');
+                setCarregando(0);
+                limpar();
+            }).catch(erro =>{
+                setMsg(erro);
+                setMsgTipo('erro');
+                setCarregando(0);
+            });
+        }
     }
+
+    function limpar(){
+        setNomeAutor('')
+    }
+
+
     return(
         <>
             {msgTipo === 'sucesso' ?
-                    <div class="alert alert-primary" role="alert">
-                        <span><strong>Wow!</strong> Evento cadastrado com sucesso &#128526;</span>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                <div class="alert alert-primary" role="alert">
+                    <span><strong>Wow!</strong> Evento cadastrado com sucesso &#128526;</span>
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                : ''
+            }
+
+            {
+                carregando > 0 ?  
+                    <div class="spinner-border text-danger mx-auto" role="status">
                     </div>
-                    : ''
-                }
-            <h5>Adicionar Autor</h5>
+                : ''    
+            } 
+            
+            <h5><Link to="/autores" className="top">
+                    <i class="fas fa-reply top-icone"></i>
+                </Link> Adicionar Autor</h5>
             <hr />
 
             <form>
@@ -47,15 +68,10 @@ function AdicionarAutor(){
                     onChange={(e)=>setNomeAutor(e.target.value)} 
                     className="form-control" placeholder="Nome do Autor" value={nomeAutor && nomeAutor}/>
                 <button                    
-                    onClick={incluir} type="button" 
-                    className="btn btn-secondary mt-2 mr-2">
-                    
+                    onClick={(e) => incluir()} type="button" 
+                    className="btn btn-secondary mt-2 mr-2">                    
                         <i className="fas fa-save"> Salvar</i>
                 </button>
-
-                <Link to="/autores" className="btn btn-secondary mt-2">
-                    <i className="fas fa-times-circle"> cancelar</i>
-                </Link>
             </form>
         </>
     )

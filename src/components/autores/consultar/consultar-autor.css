@@ -1,3 +1,8 @@
 .btn-list{
-    border-radius: 50%;
+    border-radius: 50% !important;
+}
+
+.msg-confirmar-exclusao{
+   border: 1px solid #cccccc; 
+   background-color: #eeeeee;
 }
