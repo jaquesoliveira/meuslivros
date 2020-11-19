@@ -6,8 +6,6 @@ import firebase from '../../../config/firebase';
 
 function AdicionarAutor(){
 
-   
-
     const [msgTipo, setMsgTipo] = useState();
     const [msg, setMsg] = useState();
     const [carregando, setCarregando] = useState();
