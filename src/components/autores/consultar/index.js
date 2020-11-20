@@ -10,10 +10,10 @@ function ConsultarAutor(){
     let listaAutores = [];
 
     const [excluir, setExcluir] = useState(0);
-    //const [excluido, setExcluido] = useState(0);
     const [msgTipo, setMsgTipo] = useState();
 
     const [autorExcluir, setAutorExcluir] = useState(0);
+    const [carregando, setCarregando] = useState();
 
     function consultar(){        
         if(pesquisa.length > 3){
@@ -50,7 +50,7 @@ function ConsultarAutor(){
 
     function confirmarExclusao(){
         setExcluir(0);
-        console.log(autorExcluir)
+        setCarregando(1)
 
         firebase.firestore().collection('autores').doc(autorExcluir).delete()
             .then(()=> {
@@ -60,6 +60,7 @@ function ConsultarAutor(){
                 limpar();
                 listaAutores = [];
                 setAutores(listaAutores)
+                setCarregando(0)
             })
     }
 
@@ -110,15 +111,18 @@ function ConsultarAutor(){
 
             <hr />
             {       
-            autores.map(item =>         
+            autores.map(item =>  
+                carregando > 0 ? 
+                    <div className="text-center"> 
+                        <div class="spinner-border text-danger" role="status">
+                        </div>
+                    </div>
+                :        
                 <div class="list-group list-group-flush">                     
                     <div class="list-group-item list-group-item-action" >
                         <div class="d-flex w-100 justify-content-between">
                             <div class="mb-1">{item.key} {item.nomeAutor}</div>
                             <small>
-                                {/* <button className="btn btn-danger btn-list">
-                                    <i class="fas fa-edit"></i>
-                                </button> */}
                                 <button onClick={(e) => excluirAutor(item.id)} className="btn btn-danger btn-list">
                                     <i class="fas fa-eraser"></i>
                                 </button>
