@@ -123,8 +123,10 @@ function ConsultarAutor(){
                         <div class="d-flex w-100 justify-content-between">
                             <div class="mb-1">{item.key} {item.nomeAutor}</div>
                             <small>
-                                <button onClick={(e) => excluirAutor(item.id)} className="btn btn-danger btn-list">
-                                    <i class="fas fa-eraser"></i>
+                                <button 
+                                    onClick={(e) => excluirAutor(item.id)} 
+                                    className="btn btn-danger btn-list">
+                                        <i class="fas fa-eraser"></i>
                                 </button>
                             </small>
                         </div>
@@ -133,7 +135,6 @@ function ConsultarAutor(){
                             
                         </small>
                     </div>
-                    
                 </div>
             )}
         </>

@@ -11,10 +11,13 @@ import ConsultarEditora from './components/editoras/consultar';
 import Livros from './components/livros';
 import AdicionarLivro from './components/livros/adicionar';
 import ConsultarLivro from './components/livros/consultar';
+import { Provider } from 'react-redux';
+import {store, persistor} from '../src/store';
 
 function App() {
   return (
     <>
+    <Provider store={store}>
       <Router>
         <Navbar />
         <div className="container mt-4 pt-5">          
@@ -32,6 +35,7 @@ function App() {
           <Route exact path='/livros/consultar' component={ConsultarLivro}></Route>
         </div>       
       </Router>
+      </Provider>
     </>
   );
 }

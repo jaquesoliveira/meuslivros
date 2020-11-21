@@ -18,7 +18,6 @@ function AdicionarAutor(){
     function incluir(){
 
         if(nomeAutor){
-            console.log(nomeAutor);
 
             db.collection('autores').add({
                 nomeAutor: nomeAutor
