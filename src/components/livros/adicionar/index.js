@@ -2,6 +2,7 @@ import React, {useState, useEffect}  from 'react';
 import { Link } from 'react-router-dom';
 import './adicionar-livro.css';
 
+
 import firebase from '../../../config/firebase';
 
 
@@ -16,6 +17,8 @@ function AdicionarLivro(){
     const [nomeEditoraPesquisa, setNomeEditoraPesquisa] = useState(''); 
     const [autoresConsultados, setAutoresConsultados] = useState([]);
     const [editorasConsultadas, setEditorasConsultadas] = useState([]);
+    const [imagem, setImagem] = useState([]);
+    const [imagemBase64, setImagemBase64] = useState([]);
 
     const [msgTipo, setMsgTipo] = useState();
     //const [msg, setMsg] = useState();
@@ -89,7 +92,8 @@ function AdicionarLivro(){
             tituloLivro: tituloLivro,
             editora : editora,
             autores : autores,
-            detalhes : detalhes
+            detalhes : detalhes,
+            imagem: imagemBase64
         }).then(() => {
             setMsgTipo('sucesso');
             //setCarregando(0);
@@ -135,6 +139,17 @@ function AdicionarLivro(){
     function finalizarAddEditora(){
         setAdicionarEditora(0);
         setAutoresConsultados([])
+    }
+
+    function handleIMAGEChange(e){
+        e.preventDefault();
+        let file = e.target.files[0];
+        let reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onloadend = () =>{
+            setImagem(file)
+            setImagemBase64(reader.result)
+        }
     }
 
     return(
@@ -329,6 +344,16 @@ function AdicionarLivro(){
                         value={detalhes && detalhes}
                         onChange={(e) => setDetalhes(e.target.value)}/>
                 </div>
+
+                <div className="form-group">
+                    <label>Imagem: </label>
+                    <input onChange={(e)=>handleIMAGEChange(e)} type="file" 
+                        className="form-control"/>
+                </div>
+                <div>
+                    <img src={imagemBase64 && imagemBase64} alt="..." />
+                </div>
+
                 <hr />
                 <button 
                     type="button" 

@@ -1,6 +1,7 @@
 import React, {useState, useEffect}  from 'react';
 import { Link } from 'react-router-dom';
 import firebase from '../../../config/firebase';
+import CardLivro from '../../card-livro';
 
 function ConsultarLivro(){
 
@@ -125,19 +126,15 @@ function ConsultarLivro(){
                         </div>
                     </div>
                 :        
-                <div class="list-group list-group-flush">                     
-                    <div class="list-group-item list-group-item-action" >
-                        <div class="d-flex w-100 justify-content-between">
-                            <div class="mb-1 tw-2">{item.key} {item.tituloLivro}</div>
-                            <small>
-                                {item.editora.map(edi => edi.nomeEditora)}
-                            </small>
-                        </div>
-                        <div class="mb-1"><small>{item.detalhes}</small></div>
-                        <small>
-                           {item.autores.map(aut => aut.nomeAutor)} 
-                        </small>
-                    </div>
+                <div className="col-lg-4 col-sm-12">
+                    <CardLivro 
+                        key={item.id}
+                        id={item.id}
+                        titulo={item.tituloLivro}
+                        autor={item.autores}
+                        editora={item.editora}
+                        imagem={item.imagem}      />
+                         
                 </div>
             )}
         </>

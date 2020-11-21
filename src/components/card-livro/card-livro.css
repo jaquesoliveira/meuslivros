@@ -1,0 +1,9 @@
+.card-livro{
+    width: 18rem;
+    font-size: small;    
+}
+
+.img-card-livro{
+    max-width: 100px;
+    min-width: 100px;
+}
