@@ -20,3 +20,23 @@
 .add-autor{
     background-color: #eee;
 }
+
+.acoes-lista-autores{
+    max-width: 10% !important;
+}
+
+.nome-lista-autores{
+    min-width: 90% !important;
+}
+
+.card-body{
+    /* padding: 0rem !important; */
+    border: #eeeeee solid 1px;
+}
+
+.table td, .table th{
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    padding-top: 0.1rem;
+    padding-bottom: 0.1rem;
+}

@@ -8,21 +8,24 @@ import firebase from '../../../config/firebase';
 function AdicionarLivro(){
 
     const [tituloLivro, setTituloLivro] = useState('');
-    const [editora, setEditora] = useState();
+    const [editora, setEditora] = useState([]);
     const [autores, setAutores] = useState([]);
     const [detalhes, setDetalhes] = useState('');
     //const [nomeAutor, setNomeAutor] = useState(''); 
     const [nomeAutorPesquisa, setNomeAutorPesquisa] = useState(''); 
+    const [nomeEditoraPesquisa, setNomeEditoraPesquisa] = useState(''); 
     const [autoresConsultados, setAutoresConsultados] = useState([]);
+    const [editorasConsultadas, setEditorasConsultadas] = useState([]);
 
     const [msgTipo, setMsgTipo] = useState();
-    const [msg, setMsg] = useState();
-    const [carregando, setCarregando] = useState();
+    //const [msg, setMsg] = useState();
+    //const [carregando, setCarregando] = useState();
     const [adicionarAutor, setAdicionarAutor] = useState(0);
+    const [adicionarEditora, setAdicionarEditora] = useState(0);
 
     const db = firebase.firestore();
     let listaAutores = []
-    //let listaAutoresSelecionados = []    
+    let listaEditoras = []
 
     useEffect(() => {
         consultarAutores()
@@ -52,6 +55,35 @@ function AdicionarLivro(){
         }
     }
 
+    useEffect(() => {
+        consultarEditoras()
+        console.log(nomeEditoraPesquisa)
+    },[nomeEditoraPesquisa])
+
+    function consultarEditoras(){        
+        if(nomeEditoraPesquisa.length >1){
+            firebase.firestore().collection('editoras')
+                .where('nomeEditora','>=', nomeEditoraPesquisa)
+                .get()
+                .then(async(resultado) =>{
+                    await resultado.docs.forEach(doc => {
+                        if(doc.data().nomeEditora.indexOf(nomeEditoraPesquisa) >= 0)
+                        {
+                            listaEditoras.push({
+                                id: doc.id,
+                                ...doc.data()
+                            })
+                        }
+                    }
+                )            
+                setEditorasConsultadas(listaEditoras);       
+            })
+        }else{
+            listaEditoras=[]
+            setEditorasConsultadas(listaEditoras);
+        }
+    }
+
     function incluir(){
         db.collection('livros').add({
             tituloLivro: tituloLivro,
@@ -60,20 +92,22 @@ function AdicionarLivro(){
             detalhes : detalhes
         }).then(() => {
             setMsgTipo('sucesso');
-            setCarregando(0);
+            //setCarregando(0);
             limpar();
         }).catch(erro =>{
-            setMsg(erro);
+            //setMsg(erro);
             setMsgTipo('erro');
-            setCarregando(0);
+            //setCarregando(0);
         });
     }
 
     function limpar(){
         setDetalhes('')
         setTituloLivro('')
-        setEditora('')
+        setEditora([])
         setAutores([])
+        finalizarAddAutor()
+        finalizarAddEditora()
     }   
 
     function addAutorConsultado(autorSelecionado){ 
@@ -81,16 +115,25 @@ function AdicionarLivro(){
             autores.map(item => listaAutores.push(item))        
         } 
 
-        listaAutores.push(autorSelecionado)
-        
+        listaAutores.push(autorSelecionado)        
         setAutores(listaAutores);
-
         autoresConsultados.splice(autoresConsultados.indexOf(autorSelecionado),1)
+    }
 
+    function addEditoraConsultada(editoraSelecionada){         
+
+        listaEditoras.push(editoraSelecionada)        
+        setEditora(listaEditoras);
+        editorasConsultadas.splice(editorasConsultadas.indexOf(editoraSelecionada),1)
     }
 
     function finalizarAddAutor(){
         setAdicionarAutor(0);
+        setAutoresConsultados([])
+    }
+
+    function finalizarAddEditora(){
+        setAdicionarEditora(0);
         setAutoresConsultados([])
     }
 
@@ -114,96 +157,173 @@ function AdicionarLivro(){
                 <div class="form-group">
                     <label >Título do livro</label>
                     <input
+                        maxLength="100"
                         value={tituloLivro && tituloLivro} 
-                        className="form-control col-lg-6 col-sm-12" 
+                        className="form-control" 
                         placeholder="Nome do livro"
                         onChange={(e) => setTituloLivro(e.target.value)}/>
                 </div>
 
-                <div class="form-group">
-                    <label >Editora</label>
-                    <input
-                        value={editora && editora} 
-                        className="form-control col-lg-3 col-sm-12" 
-                        placeholder="Nome da editora"
-                        onChange={(e) => setEditora(e.target.value)}/>
-                </div>
-
-                <button 
-                    type="button"
-                    className="btn btn-info mb-1"
-                    onClick={(e) => setAdicionarAutor(1)}>
-                    Adicionar autor
-                </button>
-
-                { adicionarAutor > 0 ? <div className="add-autor p-2">
-                    <div class="form-group">                        
-                        {/* <label >Autor</label> */}
-                        <div class="form-group inline"> 
-                            <input
-                                className="form-control col-lg-5 " 
-                                placeholder="Digite o nome do autor"
-                                onChange={(e) => setNomeAutorPesquisa(e.target.value)}
-                                />                        
-                        </div>
+                <div className="card mb-3">
+                    <div class="card-header">
+                        Editora
                     </div>
+                    <div className="card-body">
+                        <button 
+                            type="button"
+                            className="btn btn-info mb-1"
+                            onClick={(e) => setAdicionarEditora(1)}>
+                            Adicionar editora
+                        </button>
 
-                    {       
-                    autoresConsultados.map(item =>                              
-                        <div class="list-group list-group-flush">                     
-                            <div class="list-group-item list-group-item-action" >
-                                <div class="d-flex w-100 justify-content-between">
-                                    <div class="mb-1">{item.key} {item.nomeAutor}</div>
-                                    <small>
-                                        <button
-                                            type="button"
-                                            className="btn btn-danger btn-list"
-                                            onClick={(e) => addAutorConsultado(item)}>
-                                            <i class="fas fa-plus"></i>
-                                        </button>
-                                    </small>
+                        { adicionarEditora > 0 ? <div className="add-autor p-2">
+                            <div class="form-group">                        
+                                
+                                <div class="form-group inline"> 
+                                    <input
+                                        className="form-control col-lg-5 " 
+                                        placeholder="Digite o nome do autor"
+                                        onChange={(e) => setNomeEditoraPesquisa(e.target.value)}
+                                        />                        
                                 </div>
-                                <p class="mb-1"></p>
-                                <small>
-                                    
-                                </small>
                             </div>
-                        </div>
-                    )}
-                    <button
-                        type="button" 
-                        className="btn btn-info mt-1"
-                        onClick={()=>finalizarAddAutor()}>Finalizar</button>
-                </div>
-                : ''}
-                
 
-                <h5>Autores</h5>
-                <table class="table">
-                    <thead class="thead-dark">
-                        <tr>
-                        <th scope="col">Nome</th>
-                        <th scope="col">Ações</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        { autores.map(item =>    
-                        <tr>
-                            <td>{item.nomeAutor}</td>
-                            <td>
-                                <button className="btn btn-danger">
-                                    <i className="fas fa-times-circle"></i>
-                                    Excluir
-                                </button>
-                            </td>
-                        </tr>
-                        )}                                               
-                    </tbody>
-                </table>
+                            {       
+                            editorasConsultadas.map(item =>                              
+                                <div class="list-group list-group-flush">                     
+                                    <div class="list-group-item list-group-item-action" >
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <div class="mb-1">{item.key} {item.nomeEditora}</div>
+                                            <small>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-danger btn-list"
+                                                    onClick={(e) => addEditoraConsultada(item)}>
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </small>
+                                        </div>
+                                        <p class="mb-1"></p>
+                                        <small>
+                                            
+                                        </small>
+                                    </div>
+                                </div>
+                            )}
+                            <button
+                                type="button" 
+                                className="btn btn-info mt-1"
+                                onClick={()=>finalizarAddEditora()}>Finalizar</button>
+                        </div>
+                        : ''}
+                        
+                        
+                        <table class="table mt-2">                
+                            <thead class="thead-dark">                        
+                                <tr>
+                                <th scope="col" colspan="2">Nome</th>
+                                {/* <th scope="col" className="acoes-lista-autores">Ações</th> */}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                { editora.map(item =>    
+                                <tr>
+                                    <td>{item.nomeEditora}</td>
+                                    <td className="acoes-lista-autores">
+                                        <button className="btn btn-danger float-right">
+                                            <i className="fas fa-times-circle"></i>
+                                            Excluir
+                                        </button>
+                                    </td>
+                                </tr>
+                                )}                                               
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div className="card mb-3">
+                    <div class="card-header">
+                        Autores
+                    </div>
+                    <div className="card-body">
+                        <button 
+                            type="button"
+                            className="btn btn-info mb-1"
+                            onClick={(e) => setAdicionarAutor(1)}>
+                            Adicionar autor
+                        </button>
+
+                        { adicionarAutor > 0 ? <div className="add-autor p-2">
+                            <div class="form-group">                        
+                                {/* <label >Autor</label> */}
+                                <div class="form-group inline"> 
+                                    <input
+                                        className="form-control col-lg-5 " 
+                                        placeholder="Digite o nome do autor"
+                                        onChange={(e) => setNomeAutorPesquisa(e.target.value)}
+                                        />                        
+                                </div>
+                            </div>
+
+                            {       
+                            autoresConsultados.map(item =>                              
+                                <div class="list-group list-group-flush">                     
+                                    <div class="list-group-item list-group-item-action" >
+                                        <div class="d-flex w-100 justify-content-between">
+                                            <div class="mb-1">{item.key} {item.nomeAutor}</div>
+                                            <small>
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-danger btn-list"
+                                                    onClick={(e) => addAutorConsultado(item)}>
+                                                    <i class="fas fa-plus"></i>
+                                                </button>
+                                            </small>
+                                        </div>
+                                        <p class="mb-1"></p>
+                                        <small>
+                                            
+                                        </small>
+                                    </div>
+                                </div>
+                            )}
+                            <button
+                                type="button" 
+                                className="btn btn-info mt-1"
+                                onClick={()=>finalizarAddAutor()}>Finalizar</button>
+                        </div>
+                        : ''}
+                        
+                        
+                        <table class="table">                
+                            <thead class="thead-dark">                        
+                                <tr>
+                                <th scope="col" colspan="2">Nome</th>
+                                {/* <th scope="col" className="acoes-lista-autores">Ações</th> */}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                { autores.map(item =>    
+                                <tr>
+                                    <td>{item.nomeAutor}</td>
+                                    <td className="acoes-lista-autores">
+                                        <button className="btn btn-danger">
+                                            <i className="fas fa-times-circle"></i>
+                                            Excluir
+                                        </button>
+                                    </td>
+                                </tr>
+                                )}                                               
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
 
                 <div class="form-group">
                     <label >Detalhes</label>
                     <textarea 
+                        maxLength="500"
                         className="form-control" 
                         placeholder="Nome da editora"
                         value={detalhes && detalhes}
@@ -214,11 +334,11 @@ function AdicionarLivro(){
                     type="button" 
                     className="btn btn-secondary mt-2 mr-2"
                     onClick={incluir}>
-                        <i className="fas fa-save">Salvar</i>
+                        <i className="fas fa-save"> Salvar</i>
                 </button>
 
                 <Link to="/livros" className="btn btn-secondary mt-2">
-                    <i className="fas fa-times-circle">cancelar</i>
+                    <i className="fas fa-times-circle"> cancelar</i>
                 </Link>
             </form>
         </>
