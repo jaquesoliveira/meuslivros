@@ -70,12 +70,6 @@ function ConsultarAutor(){
 
     return(
         <>
-            <h5>
-                <Link to="/autores" className="top">
-                    <i class="fas fa-reply top-icone"></i>
-                </Link> Consultar Autores</h5>
-            <hr />
-
             {
                 excluir > 0 ? 
                 <div className="mx-auto text-center msg-confirmar-exclusao p-3 mb-2">
@@ -97,8 +91,13 @@ function ConsultarAutor(){
                         </button>
                     </div>
                     : ''
-                }
-
+            }
+            <h5>
+                <Link to="/autores" className="top">
+                    <i class="fas fa-reply top-icone"></i>
+                </Link> Consultar Autores</h5>
+            <hr />
+            
             <form>
                 <input onChange={(e)=>setPesquisa(e.target.value)}  
                     className="form-control col-sm-12 col-md-4" 
