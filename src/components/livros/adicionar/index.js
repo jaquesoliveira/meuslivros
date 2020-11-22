@@ -6,7 +6,7 @@ import './adicionar-livro.css';
 import firebase from '../../../config/firebase';
 
 
-function AdicionarLivro(){
+function AdicionarLivro(props){
 
     const [tituloLivro, setTituloLivro] = useState('');
     const [editora, setEditora] = useState([]);
@@ -29,6 +29,20 @@ function AdicionarLivro(){
     const db = firebase.firestore();
     let listaAutores = []
     let listaEditoras = []
+
+    useEffect(() =>{
+        if(props.match.params.id){
+            
+            firebase.firestore().collection('livros').doc(props.match.params.id).get()
+            .then(resultado => {
+                setTituloLivro(resultado.data().tituloLivro);
+                setAutores(resultado.data().autores);
+                setDetalhes(resultado.data().detalhes);
+                setEditora(resultado.data().editora);
+                setImagemBase64(resultado.data().imagem);                 
+            })
+        }    
+    },[])
 
     useEffect(() => {
         consultarAutores()
@@ -88,21 +102,40 @@ function AdicionarLivro(){
     }
 
     function incluir(){
-        db.collection('livros').add({
-            tituloLivro: tituloLivro,
-            editora : editora,
-            autores : autores,
-            detalhes : detalhes,
-            imagem: imagemBase64
-        }).then(() => {
-            setMsgTipo('sucesso');
-            //setCarregando(0);
-            limpar();
-        }).catch(erro =>{
-            //setMsg(erro);
-            setMsgTipo('erro');
-            //setCarregando(0);
-        });
+        if(props.match.params.id){
+            db.collection('livros').doc(props.match.params.id).update({
+                tituloLivro: tituloLivro,
+                editora : editora,
+                autores : autores,
+                detalhes : detalhes,
+                imagem: imagemBase64
+            }).then(() => {
+                setMsgTipo('sucesso');
+                //setCarregando(0);
+                limpar();
+            }).catch(erro =>{
+                //setMsg(erro);
+                setMsgTipo('erro');
+                //setCarregando(0);
+            });
+
+        }else{
+            db.collection('livros').add({
+                tituloLivro: tituloLivro,
+                editora : editora,
+                autores : autores,
+                detalhes : detalhes,
+                imagem: imagemBase64
+            }).then(() => {
+                setMsgTipo('sucesso');
+                //setCarregando(0);
+                limpar();
+            }).catch(erro =>{
+                //setMsg(erro);
+                setMsgTipo('erro');
+                //setCarregando(0);
+            });
+        }
     }
 
     function limpar(){

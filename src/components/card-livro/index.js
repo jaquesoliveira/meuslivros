@@ -1,5 +1,7 @@
 import React from 'react'
 import './card-livro.css'
+import { Link } from 'react-router-dom';
+
 
 function CardLivro(props){
     return(
@@ -11,7 +13,8 @@ function CardLivro(props){
                     
                     {props.autor.map( aut => <p className="card-text">Autor(es): {aut.nomeAutor}</p>)}
                     {props.editora.map( edi => <p className="card-text">Editora: {edi.nomeEditora}</p>)}
-                    <a href="#" className="btn btn-primary">Detalhes</a>
+                    <Link to={'/detalhes/' + props.id} className="btn btn-primary mr-1">Detalhes</Link>
+                    <Link to={'/livros/alterar/' + props.id} className="btn btn-primary">Alterar</Link>
                 </div>
             </div>
         </>
