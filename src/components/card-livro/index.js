@@ -13,7 +13,7 @@ function CardLivro(props){
                     
                     {props.autor.map( aut => <p className="card-text">Autor(es): {aut.nomeAutor}</p>)}
                     {props.editora.map( edi => <p className="card-text">Editora: {edi.nomeEditora}</p>)}
-                    <Link to={'/detalhes/' + props.id} className="btn btn-primary mr-1">Detalhes</Link>
+                    <Link to={'/livros/detalhes/' + props.id} className="btn btn-primary mr-1">Detalhes</Link>
                     <Link to={'/livros/alterar/' + props.id} className="btn btn-primary">Alterar</Link>
                 </div>
             </div>

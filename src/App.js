@@ -34,7 +34,7 @@ function App() {
           <Route exact path='/livros' component={Livros}></Route>
           <Route exact path='/livros/adicionar' component={AdicionarLivro}></Route>
           <Route exact path='/livros/consultar' component={ConsultarLivro}></Route>
-          <Route exact path='/livros/destalhes/:id' component={DetalharLivro}></Route>
+          <Route exact path='/livros/detalhes/:id' component={DetalharLivro}></Route>
           <Route exact path='/livros/alterar/:id' component={AdicionarLivro}></Route>
         </div>       
       </Router>
