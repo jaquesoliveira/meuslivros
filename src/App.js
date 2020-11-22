@@ -14,11 +14,13 @@ import ConsultarLivro from './components/livros/consultar';
 import { Provider } from 'react-redux';
 import {store, persistor} from '../src/store';
 import DetalharLivro from './components/livros/detalhar';
+import { PersistGate } from 'redux-persist/integration/react';
 
 function App() {
   return (
     <>
     <Provider store={store}>
+    <PersistGate loading={null} persistor={persistor}>
       <Router>
         <Navbar />
         <div className="container mt-4 pt-5">          
@@ -38,6 +40,7 @@ function App() {
           <Route exact path='/livros/alterar/:id' component={AdicionarLivro}></Route>
         </div>       
       </Router>
+      </PersistGate>
       </Provider>
     </>
   );

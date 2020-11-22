@@ -3,6 +3,10 @@ import { Link } from 'react-router-dom';
 import firebase from '../../../config/firebase';
 import CardLivro from '../../card-livro';
 
+
+import {useSelector, useDispatch} from 'react-redux';
+
+
 function ConsultarLivro(){
 
     const [tituloLivroPesquisa, setTituloLivroPesquisa] = useState('');
@@ -13,6 +17,9 @@ function ConsultarLivro(){
     const [msgTipo, setMsgTipo] = useState();
     const [carregando, setCarregando] = useState();
     const [livroExcluir, setLivroExcluir] = useState(0);
+    
+    const dispatch = useDispatch();
+       
 
     useEffect(() => {
         consultarLivros()
@@ -31,14 +38,39 @@ function ConsultarLivro(){
                                 id: doc.id,
                                 ...doc.data()
                             })
+
+                            
                         }
                     }
+                     
                 )            
-                setLivrosConsultados(listaLivros);       
+                setLivrosConsultados(listaLivros);
+                dispatch({type: 'LISTA_PREENCHIDA', livros: livrosConsultados})                
             })
         }else{
-            listaLivros=[]
-            setLivrosConsultados(listaLivros);
+            // listaLivros=[]
+            // setLivrosConsultados(listaLivros);
+
+            firebase.firestore().collection('livros')
+                .where('tituloLivro','>=', tituloLivroPesquisa)
+                .get()
+                .then(async(resultado) =>{
+                    await resultado.docs.forEach(doc => {
+                        if(doc.data().tituloLivro.indexOf(tituloLivroPesquisa) >= 0)
+                        {
+                            listaLivros.push({
+                                id: doc.id,
+                                ...doc.data()
+                            })                            
+                        }
+                    }
+                     
+                )            
+                setLivrosConsultados(listaLivros);
+                //dispatch({type: 'LISTA_PREENCHIDA', livros: livrosConsultados})                
+            })
+
+            
         }
     }
 
@@ -73,6 +105,8 @@ function ConsultarLivro(){
             setLivroExcluir(item);
         }
     }
+   
+   
 
     return(
         <>
@@ -98,6 +132,8 @@ function ConsultarLivro(){
                     </div>
                     : ''
             }
+
+            {/* useSelector(state => state.livros) ? console.log('okok') : console.log('deu ruim') */}
 
             <h5> 
                 <Link to="/livros" className="top">

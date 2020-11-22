@@ -165,6 +165,17 @@ function AdicionarLivro(props){
         listaAutores.push(autorSelecionado)        
         setAutores(listaAutores);
         autoresConsultados.splice(autoresConsultados.indexOf(autorSelecionado),1)
+
+       //setNomeAutorPesquisa('');
+    }
+
+    function removerAutorConsultado(autorSelecionado){ 
+        if(autores.length > 0){            
+            autores.map(item => listaAutores.push(item))        
+        } 
+       
+        listaAutores.splice(listaAutores.indexOf(autorSelecionado),1)
+        setAutores(listaAutores);
     }
 
     function addEditoraConsultada(editoraSelecionada){         
@@ -172,6 +183,17 @@ function AdicionarLivro(props){
         listaEditoras.push(editoraSelecionada)        
         setEditora(listaEditoras);
         editorasConsultadas.splice(editorasConsultadas.indexOf(editoraSelecionada),1)
+    }
+
+    function removerEditoraConsultada(editoraSelecionada){ 
+
+        // if(editora.length > 0){            
+        //     editora.map(item => listaEditoras.push(item))        
+        // } 
+      
+        // listaEditoras.splice(listaEditoras.indexOf(editoraSelecionada),1)
+        setEditora([]);
+        
     }
 
     function finalizarAddAutor(){
@@ -296,7 +318,10 @@ function AdicionarLivro(props){
                                 <tr>
                                     <td>{item.nomeEditora}</td>
                                     <td className="acoes-lista-autores">
-                                        <button className="btn btn-danger float-right">
+                                        <button 
+                                            type="button"
+                                            onClick={(e) => removerEditoraConsultada(item)}
+                                            className="btn btn-danger float-right">
                                             <i className="fas fa-times-circle"></i>
                                             Excluir
                                         </button>
@@ -325,6 +350,7 @@ function AdicionarLivro(props){
                                 {/* <label >Autor</label> */}
                                 <div class="form-group inline"> 
                                     <input
+                                        value={nomeAutorPesquisa && nomeAutorPesquisa}
                                         className="form-control col-lg-5 " 
                                         placeholder="Digite o nome do autor"
                                         onChange={(e) => setNomeAutorPesquisa(e.target.value)}
@@ -374,7 +400,10 @@ function AdicionarLivro(props){
                                 <tr>
                                     <td>{item.nomeAutor}</td>
                                     <td className="acoes-lista-autores">
-                                        <button className="btn btn-danger">
+                                        <button
+                                            type="button" 
+                                            className="btn btn-danger"
+                                            onClick={(e) => removerAutorConsultado(item)}>
                                             <i className="fas fa-times-circle"></i>
                                             Excluir
                                         </button>
