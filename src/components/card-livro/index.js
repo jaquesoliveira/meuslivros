@@ -6,7 +6,7 @@ import { Link } from 'react-router-dom';
 function CardLivro(props){
     return(
         <>
-            <div className="card text-center card-livro">
+            <div className="card text-center card-livro mx-auto">
                 <div className="card-body">
                     <img className="mb-2 img-card-livro" src={props.imagem} alt=""/>                    
                     <h5 className="card-title">{props.titulo}</h5>

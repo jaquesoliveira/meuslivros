@@ -118,15 +118,18 @@ function ConsultarLivro(){
             </form>
 
             <hr />
-            {       
+            <div className="container-fluid row col-12">
+            {   
+
             livrosConsultados.map(item =>  
                 carregando > 0 ? 
                     <div className="text-center"> 
                         <div class="spinner-border text-danger" role="status">
                         </div>
                     </div>
-                :        
-                <div className="col-lg-4 col-sm-12">
+                : 
+                
+                <div className="col-lg-4 col-sm-12 ">
                     <CardLivro 
                         key={item.id}
                         id={item.id}
@@ -134,9 +137,10 @@ function ConsultarLivro(){
                         autor={item.autores}
                         editora={item.editora}
                         imagem={item.imagem}      />
-                         
                 </div>
+                   
             )}
+            </div>            
         </>
     )
 }

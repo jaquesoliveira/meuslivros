@@ -1,6 +1,14 @@
 .card-livro{
     width: 18rem;
-    font-size: small;    
+    font-size: small;  
+    max-height: 400px;
+    min-height: 400px;  
+}
+.card-title{
+    max-height: 60px;
+    min-height: 60px;
+    font-size: small; 
+    font-weight: bold;
 }
 
 .img-card-livro{

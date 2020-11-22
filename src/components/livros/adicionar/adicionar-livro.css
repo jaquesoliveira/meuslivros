@@ -40,3 +40,8 @@
     padding-top: 0.1rem;
     padding-bottom: 0.1rem;
 }
+
+.img-capa{
+    max-width: 120px;
+    min-width: 120px;
+}

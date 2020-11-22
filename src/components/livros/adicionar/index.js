@@ -12,13 +12,17 @@ function AdicionarLivro(props){
     const [editora, setEditora] = useState([]);
     const [autores, setAutores] = useState([]);
     const [detalhes, setDetalhes] = useState('');
+    const [imagemBase64, setImagemBase64] = useState([]);
+    const [lido, setLido] = useState('off');
+    const [numPaginas, setNumPaginas] = useState(0);
+
     //const [nomeAutor, setNomeAutor] = useState(''); 
     const [nomeAutorPesquisa, setNomeAutorPesquisa] = useState(''); 
     const [nomeEditoraPesquisa, setNomeEditoraPesquisa] = useState(''); 
     const [autoresConsultados, setAutoresConsultados] = useState([]);
     const [editorasConsultadas, setEditorasConsultadas] = useState([]);
     const [imagem, setImagem] = useState([]);
-    const [imagemBase64, setImagemBase64] = useState([]);
+    
 
     const [msgTipo, setMsgTipo] = useState();
     //const [msg, setMsg] = useState();
@@ -31,15 +35,16 @@ function AdicionarLivro(props){
     let listaEditoras = []
 
     useEffect(() =>{
-        if(props.match.params.id){
-            
+        if(props.match.params.id){            
             firebase.firestore().collection('livros').doc(props.match.params.id).get()
             .then(resultado => {
                 setTituloLivro(resultado.data().tituloLivro);
                 setAutores(resultado.data().autores);
                 setDetalhes(resultado.data().detalhes);
                 setEditora(resultado.data().editora);
-                setImagemBase64(resultado.data().imagem);                 
+                setImagemBase64(resultado.data().imagem);  
+                setNumPaginas(resultado.data().paginas);
+                setLido(resultado.data().livroLido);               
             })
         }    
     },[])
@@ -108,7 +113,10 @@ function AdicionarLivro(props){
                 editora : editora,
                 autores : autores,
                 detalhes : detalhes,
-                imagem: imagemBase64
+                imagem: imagemBase64,
+                livroLido: lido,
+                paginas: numPaginas
+
             }).then(() => {
                 setMsgTipo('sucesso');
                 //setCarregando(0);
@@ -125,7 +133,9 @@ function AdicionarLivro(props){
                 editora : editora,
                 autores : autores,
                 detalhes : detalhes,
-                imagem: imagemBase64
+                imagem: imagemBase64,
+                livroLido: lido,
+                paginas: numPaginas
             }).then(() => {
                 setMsgTipo('sucesso');
                 //setCarregando(0);
@@ -182,6 +192,14 @@ function AdicionarLivro(props){
         reader.onloadend = () =>{
             setImagem(file)
             setImagemBase64(reader.result)
+        }
+    }
+
+    function checkLivroLido(lido){
+        if(lido===true){
+            setLido(false)
+        }else{
+            setLido(true)
         }
     }
 
@@ -379,12 +397,37 @@ function AdicionarLivro(props){
                 </div>
 
                 <div className="form-group">
+
+                
+                    <div class="form-check">
+                        <input 
+                            class="form-check-input" 
+                            type="checkbox"
+                            checked={lido}
+                            onChange={(e) => checkLivroLido(lido)} />
+                        <label class="form-check-label" for="defaultCheck1">
+                            Já li
+                        </label>
+                    </div>
+                </div>
+
+                <div className="form-group">
+                    <label>Páginas</label>
+                   
+                    <input className="form-control col-lg-2"
+                        type="number" 
+                        onChange={(e) => setNumPaginas(e.target.value)}
+                        value={numPaginas && numPaginas}/>
+                    
+                </div>
+
+                <div className="form-group">
                     <label>Imagem: </label>
                     <input onChange={(e)=>handleIMAGEChange(e)} type="file" 
                         className="form-control"/>
                 </div>
                 <div>
-                    <img src={imagemBase64 && imagemBase64} alt="..." />
+                    <img className="img-capa" src={imagemBase64 && imagemBase64} alt="Capa do livro" />
                 </div>
 
                 <hr />
