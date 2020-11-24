@@ -3,10 +3,12 @@ const INITIAL_STATE = {
 }
 
 function livrosReducer(state = INITIAL_STATE, action){
-    console.log({...state, livros: action.livrosConsultados})
+    const temp = {...state, livros: action.livros }
+    
     switch(action.type){
-        case 'LISTA_PREENCHIDA':            
-            return {...state, livros: action.livrosConsultados}       
+        case 'LISTA_PREENCHIDA': 
+        console.log(action)           
+            return {...state, livros: action.livros}       
         default:
             return state;    
     }

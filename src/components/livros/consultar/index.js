@@ -5,6 +5,7 @@ import CardLivro from '../../card-livro';
 
 
 import {useSelector, useDispatch} from 'react-redux';
+import Loading from '../../loading';
 
 
 function ConsultarLivro(){
@@ -19,13 +20,14 @@ function ConsultarLivro(){
     const [livroExcluir, setLivroExcluir] = useState(0);
     
     const dispatch = useDispatch();
+    const consultaStored = useSelector(state => state.livros)
        
-
     useEffect(() => {
         consultarLivros()
     },[tituloLivroPesquisa])
 
-    function consultarLivros(){        
+    function consultarLivros(){  
+        setCarregando(1)      
         if(tituloLivroPesquisa.length >1){
             firebase.firestore().collection('livros')
                 .where('tituloLivro','>=', tituloLivroPesquisa)
@@ -37,40 +39,19 @@ function ConsultarLivro(){
                             listaLivros.push({
                                 id: doc.id,
                                 ...doc.data()
-                            })
-
-                            
+                            }) 
+                            console.log(resultado.docs.length)                           
                         }
-                    }
-                     
+                    }                     
                 )            
                 setLivrosConsultados(listaLivros);
-                dispatch({type: 'LISTA_PREENCHIDA', livros: livrosConsultados})                
+                dispatch({type: 'LISTA_PREENCHIDA', livros: listaLivros})                
+                setCarregando(0)
             })
         }else{
-            // listaLivros=[]
-            // setLivrosConsultados(listaLivros);
-
-            firebase.firestore().collection('livros')
-                .where('tituloLivro','>=', tituloLivroPesquisa)
-                .get()
-                .then(async(resultado) =>{
-                    await resultado.docs.forEach(doc => {
-                        if(doc.data().tituloLivro.indexOf(tituloLivroPesquisa) >= 0)
-                        {
-                            listaLivros.push({
-                                id: doc.id,
-                                ...doc.data()
-                            })                            
-                        }
-                    }
-                     
-                )            
-                setLivrosConsultados(listaLivros);
-                //dispatch({type: 'LISTA_PREENCHIDA', livros: livrosConsultados})                
-            })
-
-            
+            setCarregando(0)
+            setLivrosConsultados(consultaStored)
+            console.log(consultaStored);
         }
     }
 
@@ -84,7 +65,6 @@ function ConsultarLivro(){
 
         firebase.firestore().collection('livros').doc(livroExcluir).delete()
             .then(()=> {
-                //setExcluido(1);
                 setMsgTipo('sucesso');
                 
                 limpar();
@@ -110,35 +90,14 @@ function ConsultarLivro(){
 
     return(
         <>
-            {
-                excluir > 0 ? 
-                <div className="mx-auto text-center msg-confirmar-exclusao p-3 mb-2">
-                    <p>Confirmar exclusão?</p>
-                    <div>
-                        <button onClick={confirmarExclusao} className="btn btn-info mr-2">Sim</button>
-                        <button onClick={negarExclusao} className="btn btn-info">Não</button>
-                    </div>
-                </div>
-                : ''
-            }
-
-            {
-                msgTipo === 'sucesso' ?
-                    <div class="alert alert-primary" role="alert">
-                        <span>Livro excluido com sucesso! &#128526;</span>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    : ''
-            }
-
-            {/* useSelector(state => state.livros) ? console.log('okok') : console.log('deu ruim') */}
-
             <h5> 
                 <Link to="/livros" className="top">
                     <i class="fas fa-reply top-icone"></i>
                 </Link> Consultar livros
+
+                <Link to="/livros/adicionar" className="top">
+                    <i class="fas fa-plus top-icone float-right mr-2"></i>
+                </Link>
             </h5>
             <hr />
 
@@ -157,13 +116,11 @@ function ConsultarLivro(){
             <div className="container-fluid row col-12">
             {   
 
+            carregando > 0 ? 
+                    <Loading />
+                :
             livrosConsultados.map(item =>  
-                carregando > 0 ? 
-                    <div className="text-center"> 
-                        <div class="spinner-border text-danger" role="status">
-                        </div>
-                    </div>
-                : 
+                 
                 
                 <div className="col-lg-4 col-sm-12 ">
                     <CardLivro 

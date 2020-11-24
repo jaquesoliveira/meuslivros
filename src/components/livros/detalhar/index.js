@@ -27,9 +27,7 @@ function DetalharLivro(props){
                 setLido(resultado.data().livroLido);               
                 setId(resultado.id)
             })
-            console.log("ok")
         }    
-        console.log("fail")
     },[])
 
     return(
