@@ -3,10 +3,8 @@ import { Link } from 'react-router-dom';
 import firebase from '../../../config/firebase';
 import CardLivro from '../../card-livro';
 
-
 import {useSelector, useDispatch} from 'react-redux';
 import Loading from '../../loading';
-
 
 function ConsultarLivro(){
 

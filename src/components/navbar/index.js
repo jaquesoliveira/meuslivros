@@ -1,8 +1,12 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import './navbar.css';
+import {useSelector} from 'react-redux';
 
 function Navbar(){
+
+    const usuarioStored = useSelector(state => state.usuarioEmail);
+
     return (
         <>
             <nav className="navbar fixed-top navbar-expand-lg navbar-dark ">
@@ -29,12 +33,13 @@ function Navbar(){
                             </Link>
                         </li>
 
-                        <li className="nav-item ">
-                            <a className="nav-link" href="#">Configurações <span className="sr-only">(current)</span></a>
-                        </li>
+                        
 
                         <li className="nav-item ">
-                            <a className="nav-link" href="#">Sair <span className="sr-only">(current)</span></a>
+                            <Link to="" className="nav-link">
+                                Sair 
+                                <span className="sr-only"></span>
+                            </Link>
                         </li>
                         
                     </ul>
@@ -42,8 +47,8 @@ function Navbar(){
                         <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
                         <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                     </form> */}
-                    <img className="img-perfil mr-2" src="https://firebasestorage.googleapis.com/v0/b/sisbronse.appspot.com/o/perfil.jpeg?alt=media&token=18fa0133-4642-4ddf-99d0-480178c55016" alt=""/>
-                    <Link to="">jaques.oliveira@gmail.com</Link>
+                    {/* <img className="img-perfil mr-2" src="https://firebasestorage.googleapis.com/v0/b/sisbronse.appspot.com/o/perfil.jpeg?alt=media&token=18fa0133-4642-4ddf-99d0-480178c55016" alt=""/> */}
+                    <Link to="">{usuarioStored}</Link>
                 </div>
                 </nav>
         </>
